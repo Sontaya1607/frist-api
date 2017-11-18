@@ -6,9 +6,29 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 let students = [
-    { id: 1, name: 'Sontaya Rungsaard', u: 'BUU', year: 2014, email: 'sontaya@gmail.com' },
-    { id: 2, name: 'Justin Bieber', u: 'NY', year: 2000, email: 'justin@gmail.com' }
+    { id: 1, name: 'Sontaya', u: 'buu', year: 2012, email: 'Sontaya@gmail.com', faculty: 'Informatics' },
+    { id: 2, name: 'Thanabodee', u: 'cu', year: 1990, email: 'win@gmail.com', faculty: 'Art' }
 ]
+
+app.post('/students', (req, res) => {
+    let student = req.body
+    student.id = students.length + 1
+    students.push(student)
+    res.status(201).json(student)
+})
+
+app.get('/students', (req, res) => {
+    res.status(200).json(students)
+})
+
+app.get('/students/:id', (req, res) => {
+    let id = req.params.id
+
+    if(!id || isNaN(id)) {
+        res.status(400).json({ errorMessage: 'This api required `id` parameter' })
+        return
+    }
+})
 
 app.get('/greeting', (req, res) => {
     let lang = {
@@ -19,34 +39,10 @@ app.get('/greeting', (req, res) => {
     let l = req.query.lang
 
     if (!l) {
-        res.json({
-            message: 'Hello'
-        })
+        res.json({ message: 'Hello' })
     } else {
-        res.json({
-            message: lang[l]
-        })
-    }
-
-    res.json({ message: 'Hello' })
-})
-
-app.post('/students', (req, res) => {
-    let s = req.body
-    students.push(s)
-    res.json(s)
-})
-
-app.get('/students', (req, res) => {
-    let i = req.query.id
-    if (!students[i-1]) {
-       res.json(students) 
-    } else {
-    res.json(students[i-1])
+        res.json({ message: lang[l] })
     }
 })
 
-app.get('/students/:id', (req, res) => {
-    res.json(students[req.params.id - 1])
-})
 module.exports = app
