@@ -26,8 +26,8 @@ app.get('/students/:id', (req, res) => {
 
     if(!id || isNaN(id)) {
         res.status(400).json({ errorMessage: 'This api required `id` parameter' })
-        return
     }
+    res.json(students[req.params.id-1])
 })
 
 app.get('/greeting', (req, res) => {
@@ -37,7 +37,7 @@ app.get('/greeting', (req, res) => {
     }
 
     let l = req.query.lang
-
+    //console.log(l)
     if (!l) {
         res.json({ message: 'Hello' })
     } else {
